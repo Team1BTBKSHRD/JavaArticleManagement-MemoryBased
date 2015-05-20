@@ -16,9 +16,9 @@ public class Article {
 	public Article(String title, String author, String content){
 		this.title = title;
 		this.author = author;
-		this.content = content;
-		id = MAX_ID++;
-		//publishDate = new SimpleDateFormat().toString();
+		this.content = content;		
+		publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
 		modifiedDate = publishDate;
+		id = MAX_ID++;
 	}
 }
