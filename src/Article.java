@@ -20,6 +20,10 @@ public class Article {
 	public int getId() {
 		return id;
 	}
+	// get id To String : By: Channa 
+	public String getIdToString(){
+		return Integer.toString(id);
+	}
 
 	public String getAuthor() {
 		return author;
