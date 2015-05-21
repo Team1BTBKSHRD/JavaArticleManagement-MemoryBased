@@ -1,19 +1,18 @@
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Filter {
-	private static HashSet<Integer> indexs = new HashSet<Integer>();
-	private static String key = "";
-	
-	public static HashSet<Integer> Search(ArrayList<Article> list, String target){
-		key = target;
+	public static HashSet<Integer> searchContains(ArrayList<Article> list, String target){
+		HashSet<Integer> indexs = new HashSet<Integer>();
 		//Linear Search
 		for(int i = 0; i < list.size(); i ++){
-			if((list.get(i).getTitle().contains(key) || (list.get(i).getAuthor().contains(key) || (list.get(i).getIdToString().contains(key))))){
+			if((list.get(i).getTitle().contains(target) || (list.get(i).getAuthor().contains(target) || (list.get(i).getIdToString().startsWith(target))))){
 				indexs.add(i);
 			}
 		}
@@ -38,9 +37,30 @@ public class Filter {
 		System.out.print("Search:   ");
 		@SuppressWarnings("resource")
 		String target = new Scanner(System.in).next();
-				
-		for(int i : Search(arr, target)){
-			System.out.println(arr.get(i));
+		ArrayList<Article> a = new ArrayList<Article>();
+		for(int i : searchContains(arr, target)){
+			a.add(arr.get(i));
+		}
+		// Clear Screen
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		// sort by id
+		Collections.sort(a, new Comparator<Article>() {
+			@Override
+			public int compare(Article o1, Article o2) {
+				// TODO Auto-generated method stub
+				return o1.getId() > o2.getId() ? 1 : -1;
+			}
+		});
+		// Display Search Result
+		for(Article i : a ){
+			System.out.println(i);
 		}
 		
 	}
