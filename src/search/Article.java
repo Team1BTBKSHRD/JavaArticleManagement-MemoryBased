@@ -11,6 +11,9 @@ public class Article {
 	private String modifiedDate;
 	private String content;
 	private static int MAX_ID = 1;
+	public Article(){
+		this("asdf","asdf","asdfafasdfasdfsadfs");
+	}
 	public Article(String author, String title, String content){
 		this.id = MAX_ID++;
 		this.author = author;
