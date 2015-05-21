@@ -1,6 +1,3 @@
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Article {
 	private int id;
 	private String author;
@@ -14,7 +11,9 @@ public class Article {
 		this.author = author;
 		this.title = title;
 		this.content = content;
-		publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
+		this.publishDate = publishDate;
+		//performance tweak
+		//publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
 		modifiedDate = publishDate;
 	}
 
