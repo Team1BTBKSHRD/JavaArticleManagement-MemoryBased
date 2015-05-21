@@ -7,14 +7,13 @@ import java.util.Set;
 class test{
 	public static void addList(List col, double count){
 		for(int i=0;i<count;i++){col.add(i);}
-		out.println();
 	}
 	public static void addListRandom(List col, double count){
 		for(double i=0;i<count;i++){col.add(Math.round(Math.random()*count));}
-		out.println();
 	}
 	public static void show(List col, double count){
 		for(Object a : col){out.print(a+",");}
+		out.println();
 	}
   public static void testAddingList(List col, double count){
     long startTime = System.currentTimeMillis();
@@ -39,6 +38,7 @@ class test{
     finishTime = System.currentTimeMillis();
     System.out.println(col.getClass().getSimpleName() + " deleting last index took: "+(finishTime-startTime)+ " ms");
   }
+  /*
   public static void testQueue(Queue col, int count){
     
   }
@@ -48,4 +48,6 @@ class test{
     long finishTime = System.currentTimeMillis();
     System.out.println(col.getClass().getSimpleName() + " adding took: "+(finishTime-startTime)+ " ms");
   }
+  */
+  
 }
