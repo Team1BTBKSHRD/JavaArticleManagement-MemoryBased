@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.sound.midi.SysexMessage;
+
 public class Filter {
 	public static HashSet<Integer> searchContains(ArrayList<Article> list, String target){
 		HashSet<Integer> indexs = new HashSet<Integer>();
@@ -19,7 +21,7 @@ public class Filter {
 		return indexs;
 	}
 	public static void main(String[] args){
-		short num =  10000;
+		int num =  100000;
 		//Create an array
 		ArrayList<Article> arr = new ArrayList<Article>();
 		//Initialize array
@@ -37,10 +39,12 @@ public class Filter {
 		System.out.print("Search:   ");
 		@SuppressWarnings("resource")
 		String target = new Scanner(System.in).next();
+		long start = System.currentTimeMillis();
 		ArrayList<Article> a = new ArrayList<Article>();
 		for(int i : searchContains(arr, target)){
 			a.add(arr.get(i));
 		}
+		long stop = System.currentTimeMillis();
 		// Clear Screen
 		System.out.println();
 		System.out.println();
@@ -49,7 +53,7 @@ public class Filter {
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		
+	
 		// sort by id
 		Collections.sort(a, new Comparator<Article>() {
 			@Override
@@ -62,6 +66,7 @@ public class Filter {
 		for(Article i : a ){
 			System.out.println(i);
 		}
-		
+		System.out.println("Total time search is : " +((stop - start)/1000) + " s");
+		System.out.println("Total Searching Found is: " + a.size());
 	}
 }
