@@ -1,8 +1,3 @@
-package search;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Article {
 	private int id;
 	private String author;
@@ -11,15 +6,14 @@ public class Article {
 	private String modifiedDate;
 	private String content;
 	private static int MAX_ID = 1;
-	public Article(){
-		this("asdf","asdf","asdfafasdfasdfsadfs",new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date()));
-	}
 	public Article(String author, String title, String content, String publishDate){
 		this.id = MAX_ID++;
 		this.author = author;
 		this.title = title;
 		this.content = content;
 		this.publishDate = publishDate;
+		//performance tweak
+		//publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
 		modifiedDate = publishDate;
 	}
 
@@ -27,11 +21,10 @@ public class Article {
 		return id;
 	}
 	
-	// get id To String : By: Channa 
 	public String getIdToString(){
 		return Integer.toString(id);
 	}
-	
+
 	public String getAuthor() {
 		return author;
 	}
