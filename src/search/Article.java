@@ -12,14 +12,14 @@ public class Article {
 	private String content;
 	private static int MAX_ID = 1;
 	public Article(){
-		this("asdf","asdf","asdfafasdfasdfsadfs");
+		this("asdf","asdf","asdfafasdfasdfsadfs",new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date()));
 	}
-	public Article(String author, String title, String content){
+	public Article(String author, String title, String content, String publishDate){
 		this.id = MAX_ID++;
 		this.author = author;
 		this.title = title;
 		this.content = content;
-		publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
+		this.publishDate = publishDate;
 		modifiedDate = publishDate;
 	}
 

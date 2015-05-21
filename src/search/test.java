@@ -1,6 +1,8 @@
 package search;
 import static java.lang.System.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -11,7 +13,8 @@ class test{
 		out.println();
 	}
 	public static void addArticle(List col, double count){
-		for(int i=0;i<count;i++){col.add(new Article());}
+		Article aa = new Article("asdf","asdf","asdfafasdfasdfsadfs",new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date()));
+		for(int i=0;i<count;i++){col.add(aa);}
 	}
 	public static void testAddingList(List col, double count){
 	    long startTime = System.currentTimeMillis();
