@@ -1,60 +1,70 @@
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class AddDemo {
+	
+	public void validateData(ArrayList<Article> lsin, String author,
+			String title, String content) {
+			String publicdate = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date());
+				if (author.isEmpty() || title.isEmpty()) {
+					System.out.println("No value");
+				} 
+				else {
+					lsin.add(new Article(author, title, content, publicdate));
+				}
+		}
 
-	public void validateDatas(ArrayList<Article> lsin,String author, String title, String content) {
-		String publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss")
-				.format(new Date());		
-		if (author.isEmpty() || title.isEmpty()) {
-			System.out.print("Value null");
-		} else {
-			lsin.add(new Article(author, title, content, publishDate));			
-		}		
-	}
-	public boolean checkConfrim(String check){
-		boolean ch = true;
-		if(check=="Y" || check=="y"){
-			 ch=true;
+		public boolean checkConfrim(String check){
+			boolean ch=true;
+			if(check.equals("Y") || check.equals("y")){
+					ch=true;
+				}
+			else if(check.equals("N") || check.equals("n")){
+					ch=false;
+				}
+			else {				
+					check();
+				}
+			return ch;		
 		}
-		else if(check=="N" || check=="n"){
-			ch=false;
-			
+		
+		public boolean check(){
+			String key = "";
+			Scanner put = new Scanner(System.in);
+			System.out.print("Do you want to continues (Y/N): ");
+			key = put.nextLine();	
+			return checkConfrim(key);	
 		}
-		return ch;
-	}
-	public void input() {
-		ArrayList<Article> lsout = new ArrayList<Article>();
-		lsout.add(new Article("A", "A", "A", "A"));
+		
+	public void Add() {
 		Scanner put = new Scanner(System.in);
-		String content = "";
-		String title = "";
-		String author = "";
-		String check="";
-//		input n value
-		while (true) {			
-			System.out.print("Please Enter Author Name: ");
-			author = put.nextLine();
-			System.out.print("Please Enter Titile Name: ");
-			title = put.nextLine();
+		String authors = "";
+		String titles = "";
+		String contents = "";		
+		boolean b=true;
+		ArrayList<Article> lout = new ArrayList<Article>();
+		while (b) {
+			System.out.print("Please Enter Author : ");
+			authors = put.nextLine();
+			System.out.print("Please Enter Titile : ");
+			titles = put.nextLine();
 			System.out.println("Please Enter Content: ");
 			while (put.hasNext()) {
-				content += put.nextLine();
-				if (content.endsWith("."))
+				contents += put.nextLine();
+				if (contents.endsWith("."))
 					break;
-			}		
-			this.validateDatas(lsout,author.trim(), title.trim(), content.trim());
-			System.out.print("You want to continues: (Y/N): ");
-			check=put.nextLine();
-			System.out.print(this.checkConfrim(check));
+			}
+			this.validateData(lout, authors.trim(), titles.trim(),
+					contents.trim());
+					b=check();		
+			}
+		 
 		}
-//		end of value
-		
-	}
 
 	public static void main(String[] args) {
-		AddDemo a = new AddDemo();
-		a.input();
+		AddDemo a = new AddDemo();		
+		a.Add();
 	}
 }
