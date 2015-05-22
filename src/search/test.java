@@ -13,8 +13,11 @@ class test{
 		out.println();
 	}
 	public static void addArticle(List col, double count){
-		Article aa = new Article("asdf","asdf","asdfafasdfasdfsadfs",new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date()));
-		for(int i=0;i<count;i++){col.add(aa);}
+		String now = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
+		for(int i=0;i<count;i++){
+			Article aa = new Article("asdf","asdf","asdfafasdfasdfsadfs",now);
+			col.add(aa);
+		}
 	}
 	public static void testAddingList(List col, double count){
 	    long startTime = System.currentTimeMillis();
