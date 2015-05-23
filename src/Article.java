@@ -1,3 +1,8 @@
+package Model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Article {
 	private int id;
 	private String author;
@@ -6,23 +11,24 @@ public class Article {
 	private String modifiedDate;
 	private String content;
 	private static int MAX_ID = 1;
-	public Article(String author, String title, String content, String publishDate){
+
+	public Article(String author, String title, String content,String publishDate) {
 		this.id = MAX_ID++;
 		this.author = author;
 		this.title = title;
 		this.content = content;
 		this.publishDate = publishDate;
-		//performance tweak
-		//publishDate = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
-		modifiedDate = publishDate;
+		this.modifiedDate = publishDate;
 	}
 
 	public int getId() {
 		return id;
 	}
-	// get id To String : By: Channa 
-	public String getIdToString(){
-		return Integer.toString(id);
+
+	public Article clone(int id) {
+		this.id = id;
+		MAX_ID--;
+		return this;
 	}
 
 	public String getAuthor() {
@@ -40,7 +46,7 @@ public class Article {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public String getPublishDate() {
 		return publishDate;
 	}
@@ -61,7 +67,10 @@ public class Article {
 		this.content = content;
 	}
 
-	public String toString(){
-		return String.format("ID:%d, Author:%s, Title:%s, Publish Date:%s, Modified Date:%s, Content:%s", id, author, title, publishDate, modifiedDate, content);
+	public String toString() {
+		return String
+				.format("ID:%d, Author:%s, Title:%s, Publish Date:%s, Modified Date:%s, Content:%s",
+						id, author, title, publishDate, modifiedDate, content);
 	}
+
 }
