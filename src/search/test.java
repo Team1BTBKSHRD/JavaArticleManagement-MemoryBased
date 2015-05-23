@@ -1,39 +1,76 @@
-package search;
+package aa;
 import static java.lang.System.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 class test{
-	public static void show(List<Article> col, double count){
-		for(Article a : col){out.print(a.getId()+",");}
-		out.println();
+	//show item by countGiven
+	public static void showList(List<Article> col, double count){
+		for(int i=0; i<count;i++){
+			out.println(col.get(i));
+		}
 	}
-	public static void addArticle(List col, double count){
+	//show result with listOfKey given
+	public static void showResult(List<Article> col, List<Integer> listOfKey){
+		for(int a : listOfKey){
+			out.println(col.get(a));
+		}
+	}
+	//adding integer
+	public static void testAddingListInteger(List col, double count){
+		long startTime = System.currentTimeMillis();
+		for(int i=0;i<10e6;i++){
+			col.add(i);
+		}
+		long finishTime = System.currentTimeMillis();
+		System.out.println(col.getClass().getSimpleName() + " adding took: "+(finishTime-startTime)+ " ms");
+	}	
+	public static void testAddingHashMaps( HashMap col,double count){		 
+		 long startTime = System.currentTimeMillis();
+		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+			Random r = new Random();
+			for(int i=0;i<count;i++){
+				int temp = alphabet.charAt(r.nextInt(alphabet.length()));
+				col.put(temp+" ", i);
+		}
+		 long finishTime = System.currentTimeMillis();
+		 //show(col, 100);
+		 System.out.println(col.getClass().getSimpleName() + " converting took: "+(finishTime-startTime)+ " ms");
+	}
+	//adding article object
+	public static void testAddingList(List col, double count){
+	    long startTime = System.currentTimeMillis();
 		String now = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss").format(new Date());
 		for(int i=0;i<count;i++){
 			Article aa = new Article("asdf","asdf","asdfafasdfasdfsadfs",now);
 			col.add(aa);
 		}
-	}
-	public static void testAddingList(List col, double count){
-	    long startTime = System.currentTimeMillis();
-	    test.addArticle(col,count); 
 	    long finishTime = System.currentTimeMillis();
 	    //show(col, 100);
 	    System.out.println(col.getClass().getSimpleName() + " adding took: "+(finishTime-startTime)+ " ms");
 	}
-  
-  //other
-	public static void addList(List col, double count){
-		for(int i=0;i<count;i++){col.add(i);}
+	public static void testAddingListRandom(List col, double count){
+	    long startTime = System.currentTimeMillis();
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		String now = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+		Random r = new Random();
+		for(int i = 0; i < count ; i++){
+			int temp = alphabet.charAt(r.nextInt(alphabet.length()));
+			col.add(new Article(temp+" ", temp + " ", temp +" ", now));
+		}
+	    long finishTime = System.currentTimeMillis();
+	    //show(col, 100);
+	    System.out.println(col.getClass().getSimpleName() + " adding took: "+(finishTime-startTime)+ " ms");
 	}
-	public static void addListRandom(List col, double count){
-		for(double i=0;i<count;i++){col.add(Math.round(Math.random()*count));}
-	}
+	//testing Delete
   public static void testDeleteItemList(List col, double count){
     long startTime = System.currentTimeMillis();
     col.remove(1);
@@ -50,16 +87,5 @@ class test{
     finishTime = System.currentTimeMillis();
     System.out.println(col.getClass().getSimpleName() + " deleting last index took: "+(finishTime-startTime)+ " ms");
   }
-  /*
-  public static void testQueue(Queue col, int count){
-    
-  }
-  public static void testAddingSet(Set col, int count){
-    long startTime = System.currentTimeMillis();
-    for(int i=0;i<count;i++){col.add(i);}    
-    long finishTime = System.currentTimeMillis();
-    System.out.println(col.getClass().getSimpleName() + " adding took: "+(finishTime-startTime)+ " ms");
-  }
-  */
   
 }
