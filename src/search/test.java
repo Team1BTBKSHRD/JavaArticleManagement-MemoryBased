@@ -1,10 +1,12 @@
-package aa;
+
 import static java.lang.System.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -19,9 +21,9 @@ class test{
 		}
 	}
 	//show result with listOfKey given
-	public static void showResult(List<Article> col, List<Integer> listOfKey){
-		for(int a : listOfKey){
-			out.println(col.get(a));
+	public static void showResult(List<Article> col, HashMap<String, Integer> listOfKey){
+		for (int value : listOfKey.values()) {
+			out.println(col.get(value));
 		}
 	}
 	//adding integer
