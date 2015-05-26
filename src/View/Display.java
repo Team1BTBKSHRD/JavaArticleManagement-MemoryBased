@@ -11,7 +11,7 @@ import Model.Article;
 public class Display {
 	public static final String ORGANIZATION_NAME = "KOREAN SOFTWARE HRD CENTER";
 	public static final String PROJECT_NAME = "ARTICLES MANAGEMENT SYSTEM";
-	public static final String MENU1 = "F) First | P) Previous | N) Next | L) Last";
+	public static final String MENU1 = "F) First | P) Previous | H) Home | N) Next | L) Last";
 	public static final String MENU2 = "A) Add | R) Remove | S)Search |  U) Update | SS) Sort | G) Goto #) Set Row | E) Exit";
 	private char topLeft;
 	private char topRight;

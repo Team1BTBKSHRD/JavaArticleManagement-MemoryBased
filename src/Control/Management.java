@@ -3,9 +3,8 @@ package Control;
 import static java.lang.System.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+//import java.util.Random;
 import java.util.Scanner;
 
 import Model.Article;
@@ -14,36 +13,23 @@ import Sort.*;
 import View.Display;
 
 public class Management {
-	private static Scanner put;	
-	private static ArrayList<Article> lstArticles;
-	private static ArrayList<Integer> lstResults;
+	private Scanner put;	
+	private ArrayList<Article> lstArticles;
+	private ArrayList<Integer> lstResults;
 	private Display display;
 	
-	public Management(){this(100);}
 	/**
-	 * Constructor with parameter
 	 * Initializing lstArticles that has Article object with random value
-	 * @param countArgs : size of lstArticles
+	 * Initializing display with lstArticles
 	 */
-	public Management(int countArgs) {
+	public Management(){
 		lstArticles = new ArrayList<Article>();
 		lstResults = new ArrayList<Integer>();
 		
 		display = new Display();//
-		display.setTableStyle('\u2554', '\u2557', '\u255A', '\u255D', '\u2566', '\u2569', '\u2560', '\u256C', '\u2563', '\u2551', '\u2550');
-		
+		display.setTableStyle('\u2554', '\u2557', '\u255A', '\u255D', '\u2566', '\u2569', '\u2560', '\u256C', '\u2563', '\u2551', '\u2550');		
 		display.setArticles(lstArticles);
-		lstResults = new ArrayList<Integer>();
 		
-		/*
-		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		
-		Random r = new Random();
-		for(int i = 0; i < countArgs ; i++){
-			int temp = alphabet.charAt(r.nextInt(alphabet.length()));
-			lstArticles.add(new Article(temp+" ", temp + " ", temp +" ", now));
-		}
-		*/		
 		String now = Article.getCurrentDate();
 		lstArticles.add(new Article("aPisal", "A", "CBD", now));
 		lstArticles.add(new Article("Vichea", "AB", "CBD", now));
@@ -63,7 +49,7 @@ public class Management {
 	 * change object Article state from user input
 	 * @param articleArgs : empty object or old object Article to set its property from user input
 	 */
-	public static void createObject(Article articleArgs){	
+	public void createObject(Article articleArgs){	
 	   	put = new Scanner(System.in); 
 		articleArgs.setTitle(inputStringFromKeyboard("Title: "));
 		articleArgs.setAuthor(inputStringFromKeyboard("Author: "));
@@ -74,7 +60,7 @@ public class Management {
 	 * @param message : message to show on console screen
 	 * @return : string from keyboard
 	 */
-	public static String inputStringFromKeyboard(String message){
+	public String inputStringFromKeyboard(String message){
 		put = new Scanner(System.in);
 		System.out.print(message);
 		return put.next();
@@ -85,7 +71,7 @@ public class Management {
 	 * @param message : message to show on console screen
 	 * @return : number from keyboard
 	 */
-	public static int inputNumberFromKeyboard(String message){
+	public int inputNumberFromKeyboard(String message){
 	    put = new Scanner(System.in);
 	    while (true) {
 	      System.out.print(message);
@@ -102,14 +88,14 @@ public class Management {
 	 * using stringBuilder
 	 * @return : contents of object Article as string
 	 */
-	public static String inputContentFromKeyboard(){
+	public String inputContentFromKeyboard(){
 		//using StringBuilder in iteration is recommended
 		put = new Scanner(System.in);
 		StringBuilder contents = new StringBuilder();
-		System.out.print("Content: ");
+		System.out.print("Type ... to Stop\nContent: ");
 		while (put.hasNext()) {
 			contents.append(put.next());
-			if (contents.toString().endsWith("."))	break;
+			if (contents.toString().endsWith("..."))	break;
 			contents.append("\n");
 		}
 		return contents.toString();
@@ -125,14 +111,166 @@ public class Management {
 		lstArticles.add(newArticle);				
 	}
 	/**
-	 * searching Object ID in lstResult 
-	 * @param idArgs : integer id to search
-	 * @return : the exact index of id from lstResult
+	 * update lstArticles with
+	 * 4 choice : author,title,content,all
+	 * @param idArgs : specific id of object article to update
 	 */
-	public static int searchListResult(Integer idArgs){	
-		ISearch searchBy = new SearchById();
-		return searchBy.search(lstArticles, Integer.toString(idArgs)).get(0);		
+	public void update(int idArgs) {
+		put = new Scanner(System.in);
+		switch (inputStringFromKeyboard("Update : A) Author, T) Title, C) Content, AA) All\nPress any key to cancel : ").toLowerCase()) {
+			case "a":	
+				lstArticles.get(idArgs-1).setAuthor(inputStringFromKeyboard("Enter Author : "));
+				System.out.println("Saved");
+				break;
+			case "t":	
+				lstArticles.get(idArgs-1).setTitle(inputStringFromKeyboard("Enter Title : "));
+				System.out.println("Saved");
+				break;
+			case "c":				
+				lstArticles.get(idArgs-1).setContent(inputContentFromKeyboard());
+				System.out.println("Saved");
+				break;
+			case "aa":			
+				createObject(lstArticles.get(idArgs-1));			
+				System.out.println("Saved");
+				break;
+		}
 	}
+	/**
+	 * searching through lstArticle with 4 choices to choose from keyboard : author,title,publishDate,ModifiedDate
+	 * using Strategy Pattern	
+	 * then set object list result from searching to display(view)
+	 */
+	public void search() {	
+		ISearch searchBy = null;
+		switch(inputStringFromKeyboard("Search : A) Author, T) Title, P) Publish Date, M) Modified Date\nPress any key to cancel : ").toLowerCase()){
+			case "a": 	
+				searchBy = new SearchByAuthor();
+				break;
+			case "t": 	
+				searchBy = new SearchByTitle();
+				break;
+			case "p": 	
+				searchBy = new SearchByPublishDate();
+				break;
+			case "m": 	
+				searchBy = new SearchByModifiedDate();
+				break;
+			default:
+				return;
+		}
+		lstResults = searchBy.search(lstArticles, inputStringFromKeyboard("Input Keyword : "));		
+		ArrayList<Article> lstPages = new ArrayList<Article>();
+		for(int index : lstResults){
+			lstPages.add(lstArticles.get(index));
+		}
+		display.setArticles(lstPages);
+	}
+	/**
+	 * sorting with 4 choices to choose from keyboard : author,title,publishDate,ModifiedDate
+	 * using Strategy Pattern
+	 * then choose if sorting ascending or descending(reversed)
+	 */
+	public void sort() {
+		ISort sortBy = new SortById();
+		switch(inputStringFromKeyboard("Sort By : A) Author, T) Title, P) Publish Date, M) Modified Date\nPress any key to sort ID : ").toLowerCase()){
+			case "a": 	
+				sortBy = new SortByAuthor();
+				break;
+			case "t": 	
+				sortBy = new SortByTitle();
+				break;
+			case "p": 	
+				sortBy = new SortByPublishDate();
+				break;
+			case "m": 	
+				sortBy = new SortByModifiedDate();
+				break;
+			default:
+				sortBy = new SortById();
+		}		
+		switch(inputStringFromKeyboard("A) Ascending, D) Descending : ").toLowerCase()){
+			case "a": 	
+				sortBy.sort(lstArticles, true);
+				break;
+			case "d": 	
+				sortBy.sort(lstArticles, false);
+				break;
+		}
+	}
+	/**
+	 * 
+	 */
+	public void remove(int idArgs){
+		ISearch searchBy = new SearchById();
+		try {
+			lstResults = searchBy.search(lstArticles, Integer.toString(idArgs));
+			lstArticles.remove(lstResults.get(0));
+		} catch (Exception e) {
+			out.println("Error Removing.");
+		}
+	}
+	/**
+	 * it is Console interface display all sort of options . . in other word it's called "view"
+	 */
+	public void display() {
+		put = new Scanner(System.in);
+		while(true){
+			display.process();			
+			switch(inputStringFromKeyboard("Option--> ").toLowerCase()){
+				//first line
+				//pagination navigator
+				case "f":	
+					display.gotoFirstPage();
+					break;
+				case "p":	
+					display.gotoPreviousPage();
+					break;
+				case "h":	//display lstArticles again //it's like a home page
+					display.setArticles(lstArticles);
+					break;
+				case "n":	
+					display.gotoNextPage();
+					break;
+				case "l": 	
+					display.gotoLastPage();
+					break;
+				//second line
+				//object list processing
+				case "a":	
+					add();
+					break;
+				case "r":	
+					remove(inputNumberFromKeyboard("Input ID: ")-1);
+					break;
+				case "s":	
+					search();
+					break;
+				case "u":	
+					update(inputNumberFromKeyboard("Input ID: "));
+					break;
+				case "ss":	
+					sort();
+					break;
+				//other bonus feature
+				case "g":	
+					display.gotoPage(inputNumberFromKeyboard("Input Page Number: "));
+					break;
+				case "#":
+					display.setPageSize(inputNumberFromKeyboard("Input Page Size: "));
+					break;
+				case "e":	
+					put.close();
+					return;				
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Management management = new Management();
+		management.display();
+	}
+	
+	//unused function
 	/**
 	 * display any List 
 	 * @param lstArgs : list to display
@@ -149,154 +287,19 @@ public class Management {
 	 * display search Result from lstArticle
 	 * by using lstResult(list of index)
 	 */
-	public static void displayResult(){
+	public void displayResult(){
 		for(int a: lstResults){
 			System.out.println(lstArticles.get(a));
 		}
 	}
 	/**
-	 * update lstArticles with
-	 * 4 choice : author,title,content,all
-	 * @param idArgs : specific id of object article to update
+	 * searching Object ID in lstResult 
+	 * @param idArgs : integer id to search
+	 * @return : the exact index of id from lstResult
 	 */
-	public static void update(int idArgs) {
-		put = new Scanner(System.in);
-		switch (inputNumberFromKeyboard("Update : 1.(Author) 2.(Title) 3.(Content) 4.(All)")) {
-			case 1: //Update Author
-				lstArticles.get(idArgs-1).setAuthor(inputStringFromKeyboard("Enter Author : "));
-				System.out.println("Saved");
-				break;
-			case 2: //Update Title
-				lstArticles.get(idArgs-1).setTitle(inputStringFromKeyboard("Enter Title : "));
-				System.out.println("Saved");
-				break;
-			case 3: //Update Content				
-				lstArticles.get(idArgs-1).setContent(inputContentFromKeyboard());
-				System.out.println("Saved");
-				break;
-			case 4: // Updated All Elements			
-				createObject(lstArticles.get(idArgs-1));			
-				System.out.println("Saved");
-				break;
-			default:
-				System.err.println("Invalid");
-				break;
-		}
-	}
-	/**
-	 * searching through lstArticle with 4 choices to choose from keyboard : author,title,publishDate,ModifiedDate
-	 * using Strategy Pattern	
-	 * then set object list result from searching to display(view)
-	 */
-	public void search() {	
-		ISearch searchBy = null;
-		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date")){
-			case "a":
-				searchBy = new SearchByAuthor();
-				break;
-			case "t":
-				searchBy = new SearchByTitle();
-				break;
-			case "p":
-				searchBy = new SearchByPublishDate();
-				break;
-			case "m":
-				searchBy = new SearchByModifiedDate();
-				break;
-			default:
-				System.out.println("Error. Please Input Again.");
-				break;
-		}
-		searchBy.search(lstArticles, inputStringFromKeyboard("Please, Input Key: "));		
-		ArrayList<Article> lstPages = new ArrayList<Article>();
-		for(int index : lstResults){
-			lstPages.add(lstArticles.get(index));
-		}
-		display.setArticles(lstPages);
-	}
-	/**
-	 * sorting with 4 choices to choose from keyboard : author,title,publishDate,ModifiedDate
-	 * using Strategy Pattern
-	 * then choose if sorting ascending or descending(reversed)
-	 */
-	public void sort() {
-		ISort sortBy;
-		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date")){
-			case "a":
-				sortBy = new SortByAuthor();
-				break;
-			case "t":
-				sortBy = new SortByTitle();
-				break;
-			case "p":
-				sortBy = new SortByPublishDate();
-				break;
-			case "m":
-				sortBy = new SortByModifiedDate();
-				break;
-			default:
-				sortBy = new SortById();
-				break;
-		}		
-		switch(inputStringFromKeyboard("A) ASC or D) DSC?")){
-			case "a":
-				sortBy.sort(lstArticles, true);
-				break;
-			case "d":
-				sortBy.sort(lstArticles, false);
-				break;
-		}
-	}
-	/**
-	 * Console interface display all sort of options . . in other word "view"
-	 */
-	public void display() {
-		put = new Scanner(System.in);
-		while(true){
-			display.process();
-			switch(inputStringFromKeyboard("Option-->")){
-				//first line
-				case "f": 
-					display.gotoFirstPage();
-					break;
-				case "p":
-					display.gotoPreviousPage();
-					break;
-				case "n":
-					display.gotoNextPage();
-					break;
-				case "l": 
-					display.gotoLastPage();
-					break;
-				//second line
-				case "a":
-					add();
-					break;
-				case "r":					
-					lstArticles.remove(inputNumberFromKeyboard("Input ID: ")-1);
-					break;
-				case "s":
-					search();
-					break;
-				case "u":
-					update(inputNumberFromKeyboard("Input ID: "));
-					break;
-				case "ss":
-					sort();
-					break;
-				case "g":
-					display.gotoPage(inputNumberFromKeyboard("Input Page Number: "));
-					break;
-				case "#":
-					display.setPageSize(inputNumberFromKeyboard("Input Page Size: "));	
-				case "e":
-					put.close();
-					return;				
-			}
-		}
-	}
-	public static void main(String[] args) {
-		Management management = new Management();
-		management.display();
-	}
+	public int searchListResult(Integer idArgs){	
+		ISearch searchBy = new SearchById();
+		return searchBy.search(lstArticles, Integer.toString(idArgs)).get(0);		
+	}	
 }
+
