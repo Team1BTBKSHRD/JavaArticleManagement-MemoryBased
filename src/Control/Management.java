@@ -25,7 +25,7 @@ public class Management {
 	 * Initializing lstArticles that has Article object with random value
 	 * @param countArgs : size of lstArticles
 	 */
-	public Management(double countArgs) {
+	public Management(int countArgs) {
 		lstArticles = new ArrayList<Article>();
 		lstResults = new ArrayList<Integer>();
 		
@@ -35,17 +35,16 @@ public class Management {
 		display.setArticles(lstArticles);
 		lstResults = new ArrayList<Integer>();
 		
-		
+		/*
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		
 		Random r = new Random();
-		String now = Article.getCurrentDate();
 		for(int i = 0; i < countArgs ; i++){
 			int temp = alphabet.charAt(r.nextInt(alphabet.length()));
 			lstArticles.add(new Article(temp+" ", temp + " ", temp +" ", now));
 		}
-				
-		
+		*/		
+		String now = Article.getCurrentDate();
 		lstArticles.add(new Article("aPisal", "A", "CBD", now));
 		lstArticles.add(new Article("Vichea", "AB", "CBD", now));
 		lstArticles.add(new Article("Dara", "E", "CBD", now));
@@ -180,7 +179,8 @@ public class Management {
 				System.out.println("Saved");
 				break;
 			default:
-				return;
+				System.err.println("Invalid");
+				break;
 		}
 	}
 	/**
@@ -190,7 +190,7 @@ public class Management {
 	 */
 	public void search() {	
 		ISearch searchBy = null;
-		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date").toLowerCase()){
+		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date")){
 			case "a":
 				searchBy = new SearchByAuthor();
 				break;
@@ -204,9 +204,10 @@ public class Management {
 				searchBy = new SearchByModifiedDate();
 				break;
 			default:
-				return;
+				System.out.println("Error. Please Input Again.");
+				break;
 		}
-		lstResults = searchBy.search(lstArticles, inputStringFromKeyboard("Please, Input Key: "));		
+		searchBy.search(lstArticles, inputStringFromKeyboard("Please, Input Key: "));		
 		ArrayList<Article> lstPages = new ArrayList<Article>();
 		for(int index : lstResults){
 			lstPages.add(lstArticles.get(index));
@@ -220,7 +221,7 @@ public class Management {
 	 */
 	public void sort() {
 		ISort sortBy;
-		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date").toLowerCase()){
+		switch(inputStringFromKeyboard("A) Author, T) Title, P) Publish Date, M) Modified Date")){
 			case "a":
 				sortBy = new SortByAuthor();
 				break;
@@ -237,7 +238,7 @@ public class Management {
 				sortBy = new SortById();
 				break;
 		}		
-		switch(inputStringFromKeyboard("A) ASC or D) DSC?").toLowerCase()){
+		switch(inputStringFromKeyboard("A) ASC or D) DSC?")){
 			case "a":
 				sortBy.sort(lstArticles, true);
 				break;
@@ -253,16 +254,13 @@ public class Management {
 		put = new Scanner(System.in);
 		while(true){
 			display.process();
-			switch(inputStringFromKeyboard("Option-->").toLowerCase()){
+			switch(inputStringFromKeyboard("Option-->")){
 				//first line
 				case "f": 
 					display.gotoFirstPage();
 					break;
 				case "p":
 					display.gotoPreviousPage();
-					break;
-				case "h":
-					display.setArticles(lstArticles);
 					break;
 				case "n":
 					display.gotoNextPage();
@@ -290,8 +288,7 @@ public class Management {
 					display.gotoPage(inputNumberFromKeyboard("Input Page Number: "));
 					break;
 				case "#":
-					display.setPageSize(inputNumberFromKeyboard("Input Page Size: "));
-					break;
+					display.setPageSize(inputNumberFromKeyboard("Input Page Size: "));	
 				case "e":
 					put.close();
 					return;				
@@ -299,7 +296,7 @@ public class Management {
 		}
 	}
 	public static void main(String[] args) {
-		Management management = new Management(inputNumberFromKeyboard("Input Count: "));
+		Management management = new Management();
 		management.display();
 	}
 }
